@@ -226,6 +226,43 @@ namespace AcManager.Tools {
             await wrapper.ReloadAsync(true);
         }
 
+        public static async Task JoinInvitationNoUI([NotNull] string ip, int port, [CanBeNull] string password)
+        {
+            OnlineManager.EnsureInitialized();
+
+            var list = OnlineManager.Instance.List;
+            var source = new FakeSource(ip, port);
+            var wrapper = new OnlineSourceWrapper(list, source);
+
+            ServerEntry server;
+
+            using (var waiting = new WaitingDialog())
+            {
+                waiting.Report(ControlsStrings.Common_Loading);
+
+                await wrapper.EnsureLoadedAsync();
+                server = list.GetByIdOrDefault(source.Id);
+                if (server == null)
+                {
+                    throw new Exception(@"Unexpected");
+                }
+            }
+
+            if (password != null)
+            {
+                server.Password = password;
+            }
+
+            await server.JoinCommand.ExecuteAsync(null);
+
+            while (server.BookingTimeLeft > TimeSpan.Zero)
+            {
+                await Task.Delay(2000);
+            }
+            await server.JoinCommand.ExecuteAsync(ServerEntry.ActualJoin);
+            await wrapper.ReloadAsync(true);
+        }
+
         private static async Task<ArgumentHandleResult> ProcessRaceOnlineJoin(NameValueCollection p) {
             // Required arguments
             var ip = p.Get(@"ip");

@@ -16,6 +16,7 @@ using AcManager.Controls;
 using AcManager.DiscordRpc;
 using AcManager.Pages.Dialogs;
 using JetBrains.Annotations;
+using AcManager.Tools;
 using AcManager.Tools.Filters.Testers;
 using AcManager.Tools.Helpers;
 using AcManager.Tools.Helpers.Api.Kunos;
@@ -462,6 +463,7 @@ namespace AcManager.Pages.Drive {
             private void Pack_Ready(object sender, EventArgs e) {
                 StartPinging().Forget();
                 LoadCurrent();
+                ArgumentsHandler.JoinInvitationNoUI("192.168.1.13", 8081, null);
             }
 
             private CancellationTokenSource _currentLoading;
