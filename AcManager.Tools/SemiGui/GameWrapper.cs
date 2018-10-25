@@ -271,6 +271,9 @@ namespace AcManager.Tools.SemiGui {
         }
 
         private static async Task<Game.Result> StartAsync_Ui(Game.StartProperties properties, GameMode mode) {
+            //return null;
+
+
             using (var ui = _uiFactory.Create()) {
                 Logging.Write($"Starting game: {properties.GetDescription()}");
                 ui.Show(properties, mode);
@@ -328,7 +331,7 @@ namespace AcManager.Tools.SemiGui {
 
                         var replayHelper = new ReplayHelper(properties, result);
                         (result == null || param.Cancel ? Cancelled : Finished)?.Invoke(null, new GameFinishedArgs(properties, result));
-
+                        Logging.Debug("Showing Results ?");
                         ui.OnResult(result, replayHelper);
                     } else {
                         ui.OnResult(null, null);

@@ -558,6 +558,8 @@ namespace AcManager.Pages.Dialogs {
             var isNoResultsMode = _properties?.GetAdditional<WhatsGoingOn>() == null
                     && (_properties?.ReplayProperties != null || _properties?.BenchmarkProperties != null);
 
+            isNoResultsMode = true;
+
             if (practiceMode || isNoResultsMode) {
                 if (IsLoaded) {
                     Close();
@@ -566,6 +568,7 @@ namespace AcManager.Pages.Dialogs {
                     Model.CurrentState = ViewModel.State.Error;
                     Model.ErrorMessage = "Nothing to display";
                     Buttons = new[] { CloseButton };
+                    Close();
                 }
                 return;
             }

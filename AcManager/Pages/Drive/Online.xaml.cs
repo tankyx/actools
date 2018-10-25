@@ -460,10 +460,24 @@ namespace AcManager.Pages.Drive {
                 Filters.Dispose();
             }
 
+            private async Task RaceAutoJoin()
+            {
+                while (true)
+                {
+                    Logging.Debug("Starting pinging ...");
+                    StartPinging().Forget();
+                    Logging.Debug("Loading Current ...");
+                    LoadCurrent();
+                    Logging.Debug("Joining Server ...");
+                    await ArgumentsHandler.JoinInvitationNoUI("192.168.1.13", 8081, null);
+                    Logging.Debug("Race is done ...");
+                    await Pack.ReloadAsync();
+                    Logging.Debug("Server list is refreshed ...");
+                }
+            }
+
             private void Pack_Ready(object sender, EventArgs e) {
-                StartPinging().Forget();
-                LoadCurrent();
-                ArgumentsHandler.JoinInvitationNoUI("192.168.1.13", 8081, null);
+                RaceAutoJoin();
             }
 
             private CancellationTokenSource _currentLoading;

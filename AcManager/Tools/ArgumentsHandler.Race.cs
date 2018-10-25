@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Media;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
+using System.Collections.Generic;
 using AcManager.Controls;
 using AcManager.Controls.ViewModels;
 using AcManager.Pages.Drive;
@@ -233,6 +235,7 @@ namespace AcManager.Tools {
             var list = OnlineManager.Instance.List;
             var source = new FakeSource(ip, port);
             var wrapper = new OnlineSourceWrapper(list, source);
+            var drive_opts = SettingsHolder.Drive;
 
             ServerEntry server;
 
@@ -248,11 +251,27 @@ namespace AcManager.Tools {
                 }
             }
 
+            await server.Update(ServerEntry.UpdateMode.Full, false, true);
+
             if (password != null)
             {
                 server.Password = password;
             }
 
+            //Change name here
+            //We are going to use the server entry team name to match client local name.
+            //Then we change the client online name to match the name required by the server.
+            IReadOnlyList<ServerEntry.CurrentDriver> drivers = server.CurrentDrivers;
+            
+            foreach(var driver in drivers)
+            {
+                if (driver.Team == drive_opts.PlayerName)
+                {
+                    drive_opts.PlayerNameOnline = driver.Name;
+                    break;
+                }
+            }
+            
             await server.JoinCommand.ExecuteAsync(null);
 
             while (server.BookingTimeLeft > TimeSpan.Zero)
