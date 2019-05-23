@@ -126,12 +126,6 @@ namespace AcManager.Pages.Dialogs {
                 _ready = value;
                 OnPropertyChanged();
                 CommandManager.InvalidateRequerySuggested();
-
-                if (value) {
-                    Toast.Show("booking is finished", AppStrings.Srs_ReadyNotification, () => {
-                        ServerEntry?.JoinCommand.Execute(ServerEntry.ActualJoin);
-                    });
-                }
             }
         }
 

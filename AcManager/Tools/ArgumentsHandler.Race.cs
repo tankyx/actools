@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using AcManager.Controls;
 using AcManager.Controls.ViewModels;
 using AcManager.Pages.Drive;
+using AcManager.Pages.Dialogs;
 using AcManager.Tools.Helpers;
 using AcManager.Tools.Helpers.Api.Kunos;
 using AcManager.Tools.Managers;
@@ -268,6 +269,12 @@ namespace AcManager.Tools {
                 if (driver.Team == drive_opts.PlayerName)
                 {
                     drive_opts.PlayerNameOnline = driver.Name;
+                    server.SelectedCarEntry.AvailableSkinId = driver.CarSkinId;
+
+                    //ServerEntry.CarEntry car = server.SelectedCarEntry;
+                    //car.AvailableSkinId = driver.CarSkinId;
+                    //server.SelectedCarEntry = car;
+
                     break;
                 }
             }
